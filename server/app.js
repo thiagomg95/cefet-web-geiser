@@ -1,12 +1,16 @@
 var express = require('express'),
     app = express();
-const fs = require ('fs');
-const path = require('path');
+var fs = require ('fs');
+var path = require('path');
+var _ = require('underscore');
 
 // carregar "banco de dados" (data/jogadores.json e data/jogosPorJogador.json)
 // você pode colocar o conteúdo dos arquivos json no objeto "db" logo abaixo
 // dica: 3-4 linhas de código (você deve usar o módulo de filesystem (fs))
-var db = {};
+var db = {
+  jogadores: JSON.parse(fs.readFileSync('server/data/jogadores.json')),
+  jogosPorJogador: JSON.parse(fs.readFileSync('server/data/jogosPorJogador.json'))
+};
 
 
 // configurar qual templating engine usar. Sugestão: hbs (handlebars)
@@ -21,7 +25,7 @@ app.set('view engine', 'hbs');
 app.set('views', 'server/views');
 app.get('/', function(request, response)
 {
-  res.render('index', {});
+  res.render('index', {db.jogadores.players});
 });
 
 // EXERCÍCIO 3
@@ -30,6 +34,17 @@ app.get('/', function(request, response)
 // "data/jogosPorJogador.json", assim como alguns campos calculados
 // dica: o handler desta função pode chegar a ter umas 15 linhas de código
 
+let jogador = _.find(db.jogadores.players, function(el)
+{
+  return el.steamid === request.params.id;
+});
+
+
+response.render('jogador', {
+  profile: jogadores[id],
+  gameInfo: jogosDesteJogador,
+  favorito: jogosDesteJogador[0]
+});
 
 // EXERCÍCIO 1
 // configurar para servir os arquivos estáticos da pasta "client"
@@ -39,6 +54,6 @@ app.use(express.static('client'));
 
 // abrir servidor na porta 3000
 app.listen(3000, function () {
-	console.log ("Server listening at http://127.0.0.1:3000");
+	console.log ("Server listening");
 });
 // dica: 1-3 linhas de código
