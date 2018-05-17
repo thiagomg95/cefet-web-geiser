@@ -45,7 +45,7 @@ app.get('/jogador/:id/', function(request, response) {
   });
 
   // retorna jogos do jogador
-  let playerDetails = dbJogador[request.params.id];
+  let playerDetails = db.jogosPorJogador[request.params.id];
 
   // contabilizar a quantidade de jogos não jogados
   playerDetails.notPlayed = _.where(playerDetails.games, {
