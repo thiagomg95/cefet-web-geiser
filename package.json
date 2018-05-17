@@ -7,11 +7,14 @@
     "doc": "docs"
   },
   "dependencies": {
+    "express": "^4.16.3",
     "hbs": "^4.0.1",
     "pub": "^0.2.0"
   },
   "devDependencies": {},
   "scripts": {
+    "//": " Digitando 'npm start' o programa é iniciado automaticamente graças a linha abaixo (start). E a função 'npm install' instala todas as dependências necessária (hbs, pub, express...) para que não tenhamos que ficar baixando um por um, ele faz tudo de uma vez",
+    "start": "node server/app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
