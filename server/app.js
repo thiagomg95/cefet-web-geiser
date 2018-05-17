@@ -25,7 +25,10 @@ app.set('view engine', 'hbs');
 app.set('views', 'server/views');
 app.get('/', function(request, response)
 {
-  res.render('index', {db.jogadores.players});
+  response.render('index', {
+    players: db.jogadores.players
+  });
+//  response.end('yay');
 });
 
 // EXERCÍCIO 3
@@ -36,16 +39,16 @@ app.get('/', function(request, response)
 
 let jogador = _.find(db.jogadores.players, function(el)
 {
-  return el.steamid === request.params.id;
+  //return el.steamid === request.params.id;
 });
 
 
-response.render('jogador', {
+/*response.render('jogador', {
   profile: jogadores[id],
   gameInfo: jogosDesteJogador,
   favorito: jogosDesteJogador[0]
 });
-
+*/
 // EXERCÍCIO 1
 // configurar para servir os arquivos estáticos da pasta "client"
 // dica: 1 linha de código
