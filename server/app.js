@@ -37,18 +37,43 @@ app.get('/', function(request, response)
 // "data/jogosPorJogador.json", assim como alguns campos calculados
 // dica: o handler desta função pode chegar a ter umas 15 linhas de código
 
-let jogador = _.find(db.jogadores.players, function(el)
-{
-  //return el.steamid === request.params.id;
+app.get('/jogador/:id/', function(request, response) {
+
+  // retorna detalhes do jogador
+  let player = _.find(db.jogadores.players, function(el) {
+    return el.steamid === request.params.id;
+  });
+
+  // retorna jogos do jogador
+  let playerDetails = dbJogador[request.params.id];
+
+  // contabilizar a quantidade de jogos não jogados
+  playerDetails.notPlayed = _.where(playerDetails.games, {
+    playtime_forever: 0
+  }).length;
+
+  // ordenar por ordem decrescente de horas jogadas
+  playerDetails.games = _.sortBy(playerDetails.games, function(el) {
+    return -el.playtime_forever;
+  });
+
+  // retorna os 5 primeiros
+  playerDetails.games = _.first(playerDetails.games, 5);
+
+  // converter tempo jogado de minuto para hora
+  playerDetails.games = _.map(playerDetails.games, function(el) {
+    el.playtime_forever = Math.round(el.playtime_forever/60);
+    return el;
+  });
+
+  response.render('jogador', {
+    profile: player,
+    gameInfo: playerDetails,
+    favorite: playerDetails.games[0]
+  });
 });
 
 
-/*response.render('jogador', {
-  profile: jogadores[id],
-  gameInfo: jogosDesteJogador,
-  favorito: jogosDesteJogador[0]
-});
-*/
 // EXERCÍCIO 1
 // configurar para servir os arquivos estáticos da pasta "client"
 // dica: 1 linha de código
